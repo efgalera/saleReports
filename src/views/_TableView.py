@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Tuple
 
 from interfaces import ViewInterface
 
@@ -7,7 +7,7 @@ class TableView(ViewInterface):
 
     def __init__(
             self,
-            total_sale_by_prod: List[str | int],
+            total_sale_by_prod: List[Tuple[str, int]],
             total_salve_value: float,
             most_frequent: str):
         super().__init__(

@@ -27,14 +27,14 @@ class DataProcessor:
     def get_total_sale_by_product(
         self,
         product: str,
-    ) -> int:
-        res = 0
+    ) -> float:
+        res: float = 0.0
         # TODO: the processor should not  know names or index of the dataset
         for row in self.data_reader.get_rows(
             column="produto",
             value=product,
             ):
-            res += row[1]
+            res += float(row[1])
 
         return res
 

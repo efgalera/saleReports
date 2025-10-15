@@ -1,6 +1,6 @@
 import os
 from typing import (
-    Optional,
+    Type,
     Dict,
     Union,
 )
@@ -15,7 +15,7 @@ from views import (
 
 from datahandler import CSVHandler
 
-VIEWS:  Dict[str, Union[JsonView, TableView]]= {
+VIEWS = {
     "json": JsonView,
     "text": TableView,
 }
@@ -26,7 +26,7 @@ VIEWS:  Dict[str, Union[JsonView, TableView]]= {
 @click.option("--start", required=False, help="Data de inicio para filtrar: aceitos x > start")
 @click.option("--end", required=False, help="Data final para filtrar: aceitos x < end")
 def vendascli(file_name, format, start, end):
-    if format not in ("text", "json"):
+    if format not in VIEWS.keys():
         raise InvalidArgummentException(f"Format {format} not supported")
     
     if not os.path.exists(file_name):
@@ -35,15 +35,12 @@ def vendascli(file_name, format, start, end):
     if start or end:
         click.echo("Filtro por datas será implementado na próxima versão")
 
-    ViewClass = VIEWS.get(format)
+    ViewClass = VIEWS[format]
     csv_handler = CSVHandler(path_to_data=file_name)
 
     processor = DataProcessor(
         data_reader=csv_handler
     )
-    total_sales = processor.get_net_sale()
-    total_value = processor.get_net_value()
-    most_frequent = processor.get_most_frequent_product()
     view = ViewClass(
         total_sale_by_prod=processor.get_net_sale(),
         total_salve_value=processor.get_net_value(),

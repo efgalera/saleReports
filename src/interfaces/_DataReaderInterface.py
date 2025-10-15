@@ -8,6 +8,7 @@ from abc import (
     )
 
 class DataReaderInterface(ABC):
+    RowType = List[Union[str, int, float]]
 
     @abstractmethod
     def read(self):
@@ -26,5 +27,5 @@ class DataReaderInterface(ABC):
         self,
         column: str,
         value: str,
-    ) -> List[List[Union[str, int]]]:
+    ) -> List[RowType]:
         raise NotImplementedError()

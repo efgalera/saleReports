@@ -1,10 +1,10 @@
-from typing import List, Union
+from typing import List, Tuple
 
 class ViewInterface:
 
     def __init__(
         self,
-        total_sale_by_prod: List[Union[str, int]],
+        total_sale_by_prod: List[Tuple[str, int]],
         total_salve_value: float,
         most_frequent: str,
     ):
@@ -12,5 +12,5 @@ class ViewInterface:
         self.total_salve_value = total_salve_value
         self.most_frequent = most_frequent
 
-    def parse_output(fields: List[str], values: List[str]) -> None:
+    def parse_output(self):
         raise NotImplementedError
