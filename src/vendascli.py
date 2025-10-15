@@ -11,7 +11,7 @@ from views import (
     TableView,
 )
 
-DATA_READER: Optional[DataProcessor] = None
+from datahandler import CSVHandler
 
 VIEWS:  Dict[str, Union[JsonView, TableView]]= {
     "json": JsonView,
@@ -27,11 +27,10 @@ def vendascli(file_name, format):
         return
 
     ViewClass = VIEWS.get(format)
-    if DATA_READER is None:
-        click.echo("DATA_READER is None. Setting to CSVReader")
+    csv_handler = CSVHandler(path_to_data=file_name)
 
     processor = DataProcessor(
-        data_reader=DATA_READER
+        data_reader=csv_handler
     )
     total_sales = processor.get_net_sale()
     total_value = processor.get_net_value()
