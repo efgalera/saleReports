@@ -1,3 +1,4 @@
+import os
 from typing import (
     Optional,
     Dict,
@@ -6,6 +7,7 @@ from typing import (
 import click
 
 from processor import DataProcessor
+from exceptions import InvalidArgummentException
 from views import (
     JsonView,
     TableView,
@@ -20,11 +22,18 @@ VIEWS:  Dict[str, Union[JsonView, TableView]]= {
 
 @click.command()
 @click.argument("file_name", nargs=1)
-@click.option("--format", help="Formato do output desejado. Valores suportados são: text | json")
-def vendascli(file_name, format):
+@click.option("--format", required=True, help="Formato do output desejado. Valores suportados são: text | json")
+@click.option("--start", required=False, help="Data de inicio para filtrar: aceitos x > start")
+@click.option("--end", required=False, help="Data final para filtrar: aceitos x < end")
+def vendascli(file_name, format, start, end):
     if format not in ("text", "json"):
-        click.echo(f"Format {format} not supported")
-        return
+        raise InvalidArgummentException(f"Format {format} not supported")
+    
+    if not os.path.exists(file_name):
+        raise FileNotFoundError(f"Failed to find {file_name}")
+
+    if start or end:
+        click.echo("Filtro por datas será implementado na próxima versão")
 
     ViewClass = VIEWS.get(format)
     csv_handler = CSVHandler(path_to_data=file_name)
