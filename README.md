@@ -1,17 +1,17 @@
 # Instalação
 ## Crie um ambiente virtual e ative-o
-* python3 -m venv env
-* source env/bin/activate
+* $ `python3 -m venv env`
+* $ `source env/bin/activate`
 
 ## Instale a aplicação
-* pip install -e .
+* $ `pip install -e .`
 
-## teste
-* pytest
+## Teste
+* $ `pytest`
 
 
 # Uso
-* vendas-cli \<nome do csv\> --format [--start <data no formato %Y/%m/%d>, --end <data no formato %Y/%m/%d>]
+* vendas-cli \<nome do csv\> --format \<formato suportado\> [--start <data no formato %Y/%m/%d>, --end <data no formato %Y/%m/%d>]
 
 # TODOs:
 * Adicionar loggin na aplicação
@@ -21,4 +21,5 @@
 
 
 # Importante
+* $ `vendas-cli --help` mostra como vendas-cli deve ser chamado na linha de comando.
 * esta aplicação foi testada com python 3.13
