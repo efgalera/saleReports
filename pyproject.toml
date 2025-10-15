@@ -1,0 +1,16 @@
+[project]
+name = "vendascli"
+version = "1.0.0"
+description = "vendascli"
+requires-python = ">=3.13"
+dependencies = [
+    "click>=8.1",
+    "pytest>=8.4"
+]
+
+[project.scripts]
+vendas-cli = "vendascli:vendascli"
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"

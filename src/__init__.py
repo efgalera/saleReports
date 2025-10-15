@@ -1,1 +1,1 @@
-from _hello import hello
+from .vendascli import vendascli

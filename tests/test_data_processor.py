@@ -27,3 +27,8 @@ def test_sale_value(processor: DataProcessor):
 def test_most_frequent_product(processor: DataProcessor):
     prod = processor.get_most_frequent_product()
     assert prod == "c"
+
+
+def test_net_sale(processor: DataProcessor):
+    net_sale = processor.get_net_sale()
+    assert net_sale == [("a", 3), ("b", 2), ("c", 5)]
