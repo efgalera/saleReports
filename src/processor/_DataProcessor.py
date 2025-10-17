@@ -49,7 +49,7 @@ class DataProcessor:
         grouping = self._net_sale()
         sorted_prods = sorted([(x, y) for x, y in grouping.items()], key=lambda z: z[1])
         return sorted_prods[-1][0]
-    
+
     def get_net_sale(self) -> List[Tuple[str, int]]:
         grouping = self._net_sale()
         return [(x, y) for x, y in grouping.items()]

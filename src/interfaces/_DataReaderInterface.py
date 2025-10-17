@@ -17,11 +17,7 @@ class DataReaderInterface(ABC):
     @abstractmethod
     def read_all(self):
         raise NotImplementedError()
-    
-    @abstractmethod
-    def get_columns(self):
-        raise NotImplementedError()
-    
+
     @abstractmethod
     def get_rows(
         self,

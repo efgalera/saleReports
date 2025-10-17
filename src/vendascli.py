@@ -1,9 +1,4 @@
 import os
-from typing import (
-    Type,
-    Dict,
-    Union,
-)
 import click
 
 from processor import DataProcessor

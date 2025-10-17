@@ -37,29 +37,19 @@ class CSVHandler(DataReaderInterface):
         return [tp(val) for tp, val in zip(self._type_mask, splited)]
             
     def read(self) -> Generator[RowType]:
-        column_name = True
         with open(self.path_to_data, "r", encoding="latin-1") as f:
+            _ = f.readline()
             for line in f:
-                if column_name:
-                    column_name = False
-                    continue
                 yield self._cast_line_to_data(line)
 
     def read_all(self) -> List[RowType]:
         res = []
-        column_name = True
         with open(self.path_to_data, "r", encoding="latin-1") as f:
+            _ = f.readline()
             for line in f:
-                if column_name:
-                    column_name = False
-                    continue
-
                 res.append(self._cast_line_to_data(line=line))
 
         return res
-
-    def get_columns(self) -> List[str]:
-        return self.columns
 
     def get_rows(
         self,
