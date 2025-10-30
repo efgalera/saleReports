@@ -1,9 +1,9 @@
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 class JsonView:
     def __init__(
         self,
-        total_sale_by_prod: List[Tuple[str, float]],
+        total_sale_by_prod: Dict[str, float],
         overall_sales: float,
         most_sold_prod: str,
     ) -> None:

@@ -1,6 +1,8 @@
 import os
 import click
 
+from manager import SaleReport
+
 
 @click.command()
 @click.argument("file_name", nargs=1)
@@ -8,4 +10,15 @@ import click
 @click.option("--start", required=False, help="Data de inicio para filtrar: aceitos x > start")
 @click.option("--end", required=False, help="Data final para filtrar: aceitos x < end")
 def vendascli(file_name, format, start, end):
-    click.echo("Under new management")
+    sale_report = SaleReport(
+        data_file_name=file_name,
+        view_name=format,
+    )
+    click.echo(sale_report.make_report())
+
+if __name__ == "__main__":
+    sale_report = SaleReport(
+        data_file_name="vendas_exemplo - python.csv",
+        view_name="text",
+    )
+    click.echo(sale_report.make_report())

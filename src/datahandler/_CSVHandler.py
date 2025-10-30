@@ -1,4 +1,5 @@
 from typing import (
+    Dict,
     List,
     Generator,
 )
@@ -15,33 +16,30 @@ class CSVHandler:
             line = f.readline()
             self.columns = line[:-1].split(",")
         
-    def read(self) -> Generator[List[str]]:
+    def _cast_line(self, line: str) -> Dict[str, str]:
+        return {col: val for col, val in  zip(self.columns,line[:-1].split(","))}
+
+    def read(self) -> Generator[Dict[str, str]]:
         with open(self.path_to_file, "r", encoding=self.encoding) as f:
             _ = f.readline()
             for line in f:
-                yield line[:-1].split(",")
+                yield self._cast_line(line=line)
 
-    def read_all(self) -> List[str]:
+    def read_all(self) -> List[Dict[str, str]]:
         res = []
         with open(self.path_to_file, "r", encoding=self.encoding) as f:
             _ = f.readline()
             for line in f:
-                res.append(line[:-1].split(","))
+                res.append(self._cast_line(line=line))
 
         return res
 
-    def get_column_index(
-        self,
-        column_name: str) -> int:
-        return self.columns.index(column_name)
-    
     def get_distinct_values(self, column: str):
-        idx = self.get_column_index(column_name=column)
         res = []
         for line in self.read():
-            if line[idx] in res:
+            if line[column] in res:
                 continue
 
-            res.append(line[idx])
+            res.append(line[column])
 
         return res

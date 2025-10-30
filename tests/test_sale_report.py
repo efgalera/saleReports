@@ -5,7 +5,7 @@ from src.manager import SaleReport
 @pytest.fixture
 def report() -> SaleReport:
     sale_report = SaleReport(
-        data_file_name="tests/data/vendas_exemplo - python.csv",
+        data_file_name="tests/data/test_sample_data.csv",
         view_name="text"
     )
     return sale_report

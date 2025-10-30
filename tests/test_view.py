@@ -6,7 +6,7 @@ def test_text_view():
     
     View = get_sale_report_view(name="text")
     text_view = View(
-        total_sale_by_prod=[("prod 1", 100.0), ("prod 2", 50.0)],
+        total_sale_by_prod={"prod 1": 100.0, "prod 2": 50.0},
         overall_sales=88,
         most_sold_prod="Test"
     )
@@ -15,7 +15,7 @@ def test_text_view():
 def test_json_view():
     View = View = get_sale_report_view(name="json")
     text_view = View(
-        total_sale_by_prod=[("prod 1", 100.0), ("prod 2", 50.0)],
+        total_sale_by_prod={"prod 1": 100.0, "prod 2": 50.0},
         overall_sales=88,
         most_sold_prod="Test"
     )

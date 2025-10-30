@@ -2,6 +2,7 @@ import pytest
 
 from src.datahandler import CSVHandler
 
+
 @pytest.fixture
 def handler() -> CSVHandler:
     return CSVHandler(path_to_file="tests/data/vendas_exemplo - python.csv")
@@ -12,14 +13,13 @@ def test_columns(handler: CSVHandler):
 def test_read_all(handler: CSVHandler):
     all_lines = handler.read_all()
     assert len(all_lines) == 4
-    assert all_lines[0] == ["a","3","49.9"]
+    assert all_lines[0] == {"col1": "a", "col2": "3", "col3": "49.9"}
 
 
 def test_read(handler: CSVHandler):
     res = []
     for line in handler.read():
-        colum_index = handler.get_column_index(handler.columns[0])
-        res.append(line[colum_index])
+        res.append(line[handler.columns[0]])
 
     assert res == ["a", "b", "a", "c"]
 

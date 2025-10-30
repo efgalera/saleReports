@@ -1,6 +1,6 @@
-from src.reports import Report
-from src.datahandler import CSVHandler
-from src.views.utils import get_sale_report_view
+from reports import Report
+from datahandler import CSVHandler
+from views.utils import get_sale_report_view
 
 
 class SaleReport:
@@ -12,9 +12,31 @@ class SaleReport:
         csv_handler = CSVHandler(path_to_file=data_file_name)
         report = Report(data_handler=csv_handler)
         self.report = report
-        self.prod_column = "produto"
         self.view = get_sale_report_view(name=view_name)
 
     def make_report(self):
-        total_sale = self.report.sum_column(column_name="preco_unitario")
-        # total_by_prod = self._get_total_sale_by_product()
+        unit_price_list = self.report.all_values(column_name="preco_unitario")
+        quantity_list = self.report.all_values(column_name="quantidade")
+        absolute_total = 0.0
+        for qty, uprice in zip(quantity_list, unit_price_list):
+            absolute_total += float(qty)*float(uprice)
+
+        total_by_prod = {}
+        most_frequent = {}
+        for grp, rows in self.report.group(column="produto"):
+            aux = 0.0
+            aux2 = 0.0
+            for row in rows:
+                qty = float(row["quantidade"])
+                price = float(row["preco_unitario"])
+                aux += qty * price
+                aux2 += qty
+            total_by_prod.update({grp: aux})
+            most_frequent.update({grp: aux2})
+
+        view = self.view(
+            total_sale_by_prod=total_by_prod,
+            overall_sales=absolute_total,
+            most_sold_prod=most_frequent,
+        )
+        return view.create()
