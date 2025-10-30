@@ -1,2 +1,1 @@
-from ._TableView import TableView
-from ._JsonView import JsonView
+from .utils import get_sale_report_view

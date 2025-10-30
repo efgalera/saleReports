@@ -1,74 +1,47 @@
 from typing import (
-    Generator,
     List,
-    Union,
+    Generator,
 )
 
-from interfaces import (
-    DataReaderInterface,
-    )
-from exceptions import InvalidColumnException
-
-
-RowType = DataReaderInterface.RowType
-
-class CSVHandler(DataReaderInterface):
-
+class CSVHandler:
     def __init__(
         self,
-        path_to_data: str
+        path_to_file: str,
+        encoding: str="latin-1",
     ) -> None:
-        super().__init__()
-        self.path_to_data: str = path_to_data
-        self._type_mask: List[type] = [
-            str,
-            int,
-            float
-        ]
-        with open(path_to_data, "r", encoding="latin-1") as f:
+        self.path_to_file = path_to_file
+        self.encoding = encoding
+        with open(path_to_file, "r", encoding=encoding) as f:
             line = f.readline()
-            self.columns = line[:-1].split(",") 
-
-    def _cast_line_to_data(
-        self,
-        line: str
-    ) -> RowType:
-        splited = line.split(",")
-        return [tp(val) for tp, val in zip(self._type_mask, splited)]
-            
-    def read(self) -> Generator[RowType]:
-        with open(self.path_to_data, "r", encoding="latin-1") as f:
+            self.columns = line[:-1].split(",")
+        
+    def read(self) -> Generator[List[str]]:
+        with open(self.path_to_file, "r", encoding=self.encoding) as f:
             _ = f.readline()
             for line in f:
-                yield self._cast_line_to_data(line)
+                yield line[:-1].split(",")
 
-    def read_all(self) -> List[RowType]:
+    def read_all(self) -> List[str]:
         res = []
-        with open(self.path_to_data, "r", encoding="latin-1") as f:
+        with open(self.path_to_file, "r", encoding=self.encoding) as f:
             _ = f.readline()
             for line in f:
-                res.append(self._cast_line_to_data(line=line))
+                res.append(line[:-1].split(","))
 
         return res
 
-    def get_rows(
+    def get_column_index(
         self,
-        column: str,
-        value: str,
-    ) -> List[RowType]:
-        
-        try:
-            data_index: int = self.columns.index(column)
-
-        except ValueError as e:
-            # TODO: start adding some logs
-            raise InvalidColumnException(f"Failed to find column: {column}")
-
-        res: List[RowType] = []
-        for row in self.read():
-            if not row[data_index] == value:
+        column_name: str) -> int:
+        return self.columns.index(column_name)
+    
+    def get_distinct_values(self, column: str):
+        idx = self.get_column_index(column_name=column)
+        res = []
+        for line in self.read():
+            if line[idx] in res:
                 continue
-            
-            res.append(row)
 
-        return res 
+            res.append(line[idx])
+
+        return res

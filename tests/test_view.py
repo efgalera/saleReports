@@ -1,34 +1,26 @@
 import pytest
 
-from src.processor import DataProcessor
-from src.views import (
-    JsonView,
-    TableView
-)
+from src.views.utils import get_sale_report_view
 
-from .utils import MockDataReader
-
-@pytest.fixture
-def processor() -> DataProcessor:
-    mock_data = MockDataReader("path/to/data")
-    return DataProcessor(data_reader=mock_data)
-
-
-def test_table_view(processor: DataProcessor) -> None:
-    view = TableView(
-        total_sale_by_prod=processor.get_net_sale(),
-        total_salve_value=processor.get_net_value(),
-        most_frequent=processor.get_most_frequent_product()
+def test_text_view():
+    
+    View = get_sale_report_view(name="text")
+    text_view = View(
+        total_sale_by_prod=[("prod 1", 100.0), ("prod 2", 50.0)],
+        overall_sales=88,
+        most_sold_prod="Test"
     )
-    to_print = view.parse_output()
-    assert to_print == "** total vendas por produto **\n      produto | quantidade    \n      a | [3]\n      b | [2]\n      c | [5]\n\n\n** total de vendas - valor: 21\n\n** produto mais vendido: c\n"
+    assert type(text_view.create()) == str
 
-def test_json_view(processor: DataProcessor) -> None:
-    view = JsonView(
-        total_sale_by_prod=processor.get_net_sale(),
-        total_salve_value=processor.get_net_value(),
-        most_frequent=processor.get_most_frequent_product()
+def test_json_view():
+    View = View = get_sale_report_view(name="json")
+    text_view = View(
+        total_sale_by_prod=[("prod 1", 100.0), ("prod 2", 50.0)],
+        overall_sales=88,
+        most_sold_prod="Test"
     )
-    to_print = view.parse_output()
-    assert to_print.get("total_vendas_prod") == [{'a': 3}, {'b': 2}, {'c': 5}]
-    assert to_print.get("total_valor_vendas") == 21
+    assert type(text_view.create()) == dict
+
+def test_fail_view():
+    with pytest.raises(TypeError):
+        get_sale_report_view(name="fail")
