@@ -22,7 +22,7 @@ class SaleReport:
             absolute_total += float(qty)*float(uprice)
 
         total_by_prod = {}
-        most_frequent = {}
+        most_frequent = ("", 0)
         for grp, rows in self.report.group(column="produto"):
             aux = 0.0
             aux2 = 0.0
@@ -32,11 +32,12 @@ class SaleReport:
                 aux += qty * price
                 aux2 += qty
             total_by_prod.update({grp: aux})
-            most_frequent.update({grp: aux2})
+            if aux2 > most_frequent[1]:
+                most_frequent = (grp, aux2)
 
         view = self.view(
             total_sale_by_prod=total_by_prod,
             overall_sales=absolute_total,
-            most_sold_prod=most_frequent,
+            most_sold_prod=most_frequent[0],
         )
         return view.create()
